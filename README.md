@@ -34,3 +34,10 @@ Chrome, Firefox, or Safari installed.
 Statisticians with basic understanding of _R_, and with an interest in
 high-throughput DNA sequence data, especially of designed experiments.
 
+# Brief biography
+
+Dr. Martin Morgan leads the successful open source, open development
+_Bioconductor_ project (http://bioconductor.org) for the analysis and
+comprehension of high throughput genomic data. Dr. Morgan's interests
+include statistical computation, integrative analysis of multiple
+'omics data sets, and effective data comprehension.
