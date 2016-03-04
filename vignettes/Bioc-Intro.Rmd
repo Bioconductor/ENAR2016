@@ -19,12 +19,92 @@ knitr::opts_chunk$set(
     cache=as.logical(Sys.getenv("KNITR_CACHE", "TRUE")))
 ```
 
+```{r setup, echo=FALSE}
+suppressPackageStartupMessages({
+    library(ggplot2)
+})
+```
 
 # Introduction
 
 ## _R_
 
+- [r-project.org][]: "A free software environment for statistical
+  computing and graphics"
+
+Data & functions
+
+Vectors
+
+- logical (`c(TRUE, FALSE)`), integer (`1:5`), numeric (`rnorm(10)`),
+  character (`c("alpha", "beat")`), complex
+
+- statistical concepts: missing values (`NA`), factors
+  (`factor(c("Female", "Male"))`), formulas (`y ~ x`)
+
+- vectorized
+
+```{r vectors}
+x <- rnorm(1000)
+y <- x + rnorm(1000)
+plot(y ~ x)
+```
+
+Objects: classes and methods
+
+- coordinated manipulation of related data
+
+- simple _classes_, e.g., `data.frame()`, `matrix()`
+
+- more complicated classes, e.g., `lm()`
+
+- manipulation via _methods_
+
+```{r classes}
+df <- data.frame(Y = y, X = x)
+fit <- lm(Y ~ X, df)
+plot(Y ~ X, df)
+abline(fit, col="red", lwd=2)
+anova(fit)
+```
+
+Packages
+
+- base & recommended
+    - e.g., `stats`, `graphics`, `Matrix`
+
+- contributed
+    - e.g., `ggplot2`, `dplyr`, `ade`
+    - discovery: [CRAN][] landing pages and task views
+    - installation: `install.packages()` (or `biocLite()`, below)
+
+```{r ggplot2, warning=FALSE}
+library(ggplot2)
+ggplot(df, aes(x=X, y=Y)) + geom_point() + geom_smooth(color="blue") +
+    geom_smooth(method="lm", color="red")
+```
+
+Help!
+
+- `help.start()`
+- `?rnorm`
+- `?"plot<tab>...`
+
 ## _Bioconductor_
+
+- [bioconductor.org][]: "Analysis and comprehension of high-throughput
+  genomic data"
+
+Biological domains
+
+Principles
+
+Installation and use
+
+- discovery: [biocViews][], package landing pages (e.g., [DESeq2][])
+- installation: `biocLite("DESeq2")`; also works for CRAN & github
+  packages
+- help! -- [support.bioconductor.org][]
 
 ## Sequence Analysis
 
@@ -56,7 +136,7 @@ Funding
 - NCI / ITCR
 - EC / SOUND
 
-Personnel
+
 
 - Current and recent team members
 - Technical Advisory Board
@@ -65,3 +145,8 @@ Personnel
 ```{r sessionInfo}
 sessionInfo()
 ```
+
+[r-project.org]: https://r-project.org
+[CRAN]: https://cran.r-project.org
+[bioconductor.org]: https://bioconductor.org
+[support.bioconductor.org]: https://support.bioconductor.org
