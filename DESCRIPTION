@@ -1,0 +1,31 @@
+Package: ENAR2016
+Type: Package
+Title: Tutorial: Introduction to High Throughput DNA Sequence Data
+    Analysis Using R / Bioconductor
+Version: 0.0.1
+Authors@R: c(person("Martin", "Morgan", role="cre",
+    email="martin.morgan@roswellpark.org"))
+Description: Vignettes and resources to support a 90 minute
+    tutorial. Modern methods of high-throughput genomic data generate
+    large primary data sets that require significant data manipulation
+    and statistical summary before arriving at biological
+    insight. This workshop starts by outlining basic DNA sequence
+    analysis work flows, from primary data generation to biological
+    interpretation. We use this outline, and especially the 'RNA-seq
+    known gene differential expression' work flow, to identify
+    relevant data management and statistical issues. The workshop then
+    steps through _R_ and _Bioconductor_ code to implement essential
+    stages in data management and statistical analysis. We conclude
+    with a brief overview of the resources available for further
+    study.
+Imports: BiocInstaller
+Suggests:
+    DESeq2, airway,
+    Biostrings, GenomicRanges, SummarizedExperiment,
+    GenomicAlignments,
+    TxDb.Hsapiens.UCSC.hg19.knownGene, org.Hs.eg.db, AnnotationHub,
+    biomaRt, 
+    BiocParallel,
+    BiocStyle, knitr    
+License: Artistic-2.0
+VignetteBuilder: knitr
