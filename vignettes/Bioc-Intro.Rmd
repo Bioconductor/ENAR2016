@@ -27,7 +27,7 @@ suppressPackageStartupMessages({
     library(DESeq2)
     library(org.Hs.eg.db)
     library(TxDb.Hsapiens.UCSC.hg19.knownGene)
-    ## library(BSgenome.Hsapiens.UCSC.hg19)
+    library(BSgenome.Hsapiens.UCSC.hg19)
     library(AnnotationHub)
 })
 ```
@@ -128,7 +128,7 @@ Principles
     - Example: 'release' (bug fixes only; end user oriented) and
       'devel' (new features, new packages; developer playground)
       versions
-	<!-- FIXME: Nature quote -->
+    <!-- FIXME: Nature quote -->
 
 Installation and use
 
@@ -157,6 +157,8 @@ Key packages: data access
 - [GenomicAlignments][] / [Rsamtools][]: BAM alignments
 - [VariantAnnotation][]: VCF files
 - [rtracklayer][]: BED, GFF / GTF, BigWig, ...
+
+![](figures/SE_Description.png)
 
 Coordinated management: [SummarizedExperiment][]
 
@@ -224,37 +226,37 @@ library(airway)
 data("airway")
 se <- airway
 ```
-    
-Assay data
 
-```{r}
-head(assay(se))
-```
+Assay data
 
 - Features x samples
 - Raw counts
 - Row-wise tests
 
-Experimental design
+    ```{r}
+    head(assay(se))
+    ```
 
-```{r}
-colData(se)
-design = ~ cell + dex
-se$dex <- relevel(se$dex, "untrt")     # 'untrt' as reference level
-```
+Experimental design
 
 - Covariate (`cell`) plus treatment (`dex`)
 - _R_'s formula interface allows for complicated designs, contrasts,
   etc
-    
+
+    ```{r}
+    colData(se)
+    design = ~ cell + dex
+    se$dex <- relevel(se$dex, "untrt")     # 'untrt' as reference level
+    ```
+
 Features (genes)
 
-```{r}
-rowRanges(se)
-```
-
 - Genomic coordinates of gene models
-    
+
+    ```{r}
+    rowRanges(se)
+    ```
+
 ## Analysis Pipeline
 
 
@@ -336,9 +338,9 @@ Be aware of _batch effects_
       build surrogate variables; remove known batch effects
     - Benefits: reduce dependence, stabilize error rate estimates, and
       improve reproducibility
-    - _combat_ software / [sva][] _Bioconductor_ package 
-    
-  ![](figures/nrg2825-f2.jpg) 
+    - _combat_ software / [sva][] _Bioconductor_ package
+
+  ![](figures/nrg2825-f2.jpg)
   HapMap samples from one facility, ordered by date of processing.
 
 ### Wet-lab
@@ -435,6 +437,27 @@ Reduction to 'count tables'
   [arXiv](http://arxiv.org/abs/1505.02710)
 - Integration with gene-level analyses --   [Soneson et al][].
 
+    ```{r, eval=FALSE}
+    ## in Bioc-devel
+
+    library(tximportData)
+    dir <- system.file("extdata", package="tximportData")
+    samples <- read.table(file.path(dir,"samples.txt"), header=TRUE)
+    files <- file.path(dir,"salmon", samples$run, "quant.sf")
+    names(files) <- paste0("sample",1:6)
+
+    # tx2gene links transcript IDs to gene IDs for summarization
+    tx2gene <- read.csv(file.path(dir, "tx2gene.csv"))
+
+    txi <- tximport(files, type="salmon", tx2gene=tx2gene)
+    ```
+
+# tx2gene links transcript IDs to gene IDs for summarization
+tx2gene <- read.csv(file.path(dir, "tx2gene.csv"))
+
+txi <- tximport(files, type="salmon", tx2gene=tx2gene)
+
+
 [Soneson et al]: http://f1000research.com/articles/4-1521/v1
 
 ### Statistical Considerations
@@ -481,11 +504,11 @@ Normalization
       mean of all samples
     - Functions other than the median can be used; control genes can be
       used instead
-    
+
 Appropriate error model
 
 - Count data is _not_ distributed normally or as a Poisson process,
-  but rather as negative binomial. 
+  but rather as negative binomial.
 - Result of a combination Poisson (`shot' noise, i.e., within-sample
   technical and sampling variation in read counts) with variation
   between biological samples.
@@ -513,8 +536,7 @@ Pre-filtering
   (normalized) read counts in at least K samples. Variance filter,
   e.g., IQR (inter-quartile range) provides a robust estimate of
   variability; can be used to rank and discard least-varying regions.
-- More nuanced approaches: `r Biocpkg("edgeR")` vignette; work flow
-  today.
+- More nuanced approaches: [edgeR][] vignette.
 
 Borrowing information
 
@@ -561,7 +583,7 @@ Borrowing information
     ```
 - 'TxDb'
 
-	```{r}
+    ```{r}
     ## gene models, organized by entrez identifier
     library(TxDb.Hsapiens.UCSC.hg19.knownGene)
     txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
@@ -570,6 +592,15 @@ Borrowing information
     transcriptsBy(txdb, "gene")[egid]
     ```
 - 'BSgenome': [BSgenome.Hsapiens.UCSC.hg19][]
+
+    ```{r}
+    library(BSgenome.Hsapiens.UCSC.hg19)
+    genome <- BSgenome.Hsapiens.UCSC.hg19
+    gn <- genes(txdb)[egid]
+    up1000 <- flank(gn, width=1000)
+    getSeq(genome, up1000)
+    ```
+
 - [AnnotationHub][]
     - Many consortium-scale resources
     - Cached on disk
@@ -579,6 +610,8 @@ Borrowing information
     library(AnnotationHub)
     hub = AnnotationHub()
     query(hub, c("ensembl", "gtf", "release-83"))
+    hub["AH50417"]
+    hub[["AH50417"]]
     ```
 
 # Challenges & Solutions
@@ -695,13 +728,13 @@ Vignettes
         vignette: >
           % \VignetteEngine{knitr::rmarkdown}
         ---
-        
+
         # Heading
 
         ## Sub-heading
-        
+
         Some text.
-        
+
         ```{r r-code}
         x <- rnorm(1000)
         plot(x)
@@ -719,7 +752,7 @@ Packages
         /MyPackage/R/fun_one.R
         /MyPackage/R/fun_another.R
         /MyPackage/vignettes
-    
+
 - Very easy to create
 - Very easy to share, e.g., github
 
