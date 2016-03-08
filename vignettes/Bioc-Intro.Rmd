@@ -694,10 +694,10 @@ Restriction and 'chunk' iteration
     aln <- readGAlignments(file)                   # all data
     length(aln)
     bamfile <- open(BamFile(file, yieldSize=1500)) # chunks
-    length(readGAlignmens(file))                   # better: yieldSize=1e6
-    length(readGAlignmens(file))
-    length(readGAlignmens(file))
-    length(readGAlignmens(file))
+    length(readGAlignments(file))                  # better: yieldSize=1e6
+    length(readGAlignments(file))
+    length(readGAlignments(file))
+    length(readGAlignments(file))
     ```
 
 Parallel evaluation: [BiocParallel][]
