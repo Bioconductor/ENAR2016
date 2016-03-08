@@ -682,6 +682,24 @@ Efficient _R_ programming
     result <- sqrt(1:10)
     ```
 
+Restriction and 'chunk' iteration
+
+- e.g., `ScanBamParam()`, `VcfParam()`
+- e.g., `BamFile(..., yieldSize=1000000)`
+- See also [GenomicFiles][]::`reduceByYield()`
+
+    ```{r restriction}
+    library(GenomicAlignments)
+    file <- system.file("extdata", "ex1.bam", package="Rsamtools")
+    aln <- readGAlignments(file)                   # all data
+    length(aln)
+    bamfile <- open(BamFile(file, yieldSize=1500)) # chunks
+    length(readGAlignmens(file))                   # better: yieldSize=1e6
+    length(readGAlignmens(file))
+    length(readGAlignmens(file))
+    length(readGAlignmens(file))
+    ```
+
 Parallel evaluation: [BiocParallel][]
 
 - _After_ writing efficient _R_ code
@@ -816,5 +834,6 @@ sessionInfo()
 [BSgenome.Hsapiens.UCSC.hg19]: https://bioconductor.org/packages/BSgenome.Hsapiens.UCSC.hg19
 [AnnotationHub]: https://bioconductor.org/packages/AnnotationHub
 [GenomicRanges]: https://bioconductor.org/packages/GenomicRanges
+[GenomicFiles]: https://bioconductor.org/packages/GenomicFiles
 [BiocParallel]: https://bioconductor.org/packages/BiocParallel
 [knitr]: https://cran.r-project.org/package=knitr
